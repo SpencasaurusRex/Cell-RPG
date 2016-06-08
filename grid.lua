@@ -12,13 +12,34 @@ static.grid = {
     
     addCellObject = function(self, obj)
         if self:isOpen(obj.x, obj.y) then
-            self.locked[obj.x][obj.y] = obj.solid
             table.insert(self.cell[obj.x][obj.y], obj)
             table.insert(self.cellObjects, obj)
+            self.locked[obj.x][obj.y] = util.anyCellSolid(self.cell[obj.x][obj.y])
             return true
         else
             return false
         end
+    end,
+    -- Assumes spot is open
+    move = function(self, obj, x, y)
+        -- Remove from old spot
+        util.tableRemoveValue(self.cell[obj.cellX][obj.cellY], obj)
+        -- Store in new spot
+        table.insert(self.cell[x][y], obj)
+        -- Lock spot if necessary
+        self.locked[x][y] = util.anyCellSolid(self.cell[x][y])
+        -- Create a callback object to unlock old spot
+        local callback = {}
+        callback.x = obj.cellX
+        callback.y = obj.cellY
+        callback.done = function(self)
+            static.grid.locked[self.x][self.y] = util.anyCellSolid(static.grid.cell[self.x][self.y])
+        end
+        -- Update cellX,Y
+        obj.cellX = x
+        obj.cellY = y
+        
+        return callback
     end
 }
 
