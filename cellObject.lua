@@ -20,8 +20,8 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
                     w / 2 - s * (camX - self.x) - s / 2,
                     h / 2 + s * (camY - self.y) + s / 2 - s,
                     0,
-                    static.camera.scale,
-                    static.camera.scale
+                    static.camera.scale * (self.scale / self.image:getWidth()),
+                    static.camera.scale * (self.scale / self.image:getHeight())
         end,
         update = function(self)
             if self.movable and self.dir then
