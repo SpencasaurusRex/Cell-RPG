@@ -1,5 +1,19 @@
 util = {}
 
+-- Returns the value clamped between a and b
+util.clamp = function(val, a, b)
+    if b then
+        if a > b then
+            if val > a then return a end
+            if val < b then return b end
+        else
+            if val < a then return a end
+            if val > b then return b end
+        end
+    elseif val < a then return a end
+    return val
+end
+
 -- Returns a table {x,y} that matches the user's WASD input
 util.inputDirection = function()
     local dir = {x = 0, y = 0}

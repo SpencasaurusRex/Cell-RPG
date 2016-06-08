@@ -18,20 +18,20 @@ function love.load(arg)
 
     -- Load in grass plot
     local grassSprite  = love.graphics.newImage('Graphics/grass.png')
-    local i = 0
-    local j = 0
+    local i,j
     for i=0,static.grid.width do
         for j=0,static.grid.height do
-            local cellObj = cellObject.new(i, j, grassSprite, false, false)
+            local cellObj = cellObject.new(i, j, grassSprite, 32, false, false)
             static.grid:addCellObject(cellObj)        
         end
     end
-    result = static.grid:addCellObject(static.player)
+    static.grid:addCellObject(static.player)
 end
 
 function love.update(dt)
     static.time.delta = dt
     handleInput()
+    local k,v
     for k,v in pairs(static.grid.cellObjects) do
         v:update()
     end
@@ -39,21 +39,26 @@ function love.update(dt)
 end
 
 function love.draw()
+    local k,v
     for k,v in pairs(static.grid.cellObjects) do
         love.graphics.draw(v:draw())
     end
 
     -- Visualize blocked cells
     local blockedSprite = love.graphics.newImage('Graphics/square.png')
-    local i = 0
-    local j = 0
+    local i,j
     for i=0,static.grid.width do
         for j=0,static.grid.height do
             if static.grid.locked[i][j] then
-                love.graphics.draw(cellObject.new(i, j, blockedSprite, false, false):draw())
+                love.graphics.draw(cellObject.new(i, j, blockedSprite, 32, false, false):draw())
             end
         end
     end
+end
+
+function love.wheelmoved(x,y)
+    static.camera.scale = static.camera.scale + y / 2
+    static.camera.scale = util.clamp(static.camera.scale, 1)
 end
 
 function love.quit()

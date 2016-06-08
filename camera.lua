@@ -1,8 +1,7 @@
 static.camera = {
     x = 0,
     y = 0,
-    scale = 64,
-    defaultScale = 64,
+    scale = 3,
     target = nil,
     follow = function(self, theTarget)
         if theTarget then
