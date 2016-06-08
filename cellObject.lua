@@ -1,5 +1,6 @@
 cellObject = {}
 cellObject.new = function (xPos, yPos, im, canMove, isSolid)
+    --TODO store scale in the object
     local cellObj = {
         x = xPos,
         y = yPos,
@@ -24,8 +25,25 @@ cellObject.new = function (xPos, yPos, im, canMove, isSolid)
         update = function(self)
             if self.movable then
                 if self.dir then
+                    -- Move the cell
                     self.x = self.x + self.dir.x * static.time.delta * self.speed
                     self.y = self.y + self.dir.y * static.time.delta * self.speed
+                    
+                    local t = self.target
+                    -- If the cell is done moving on the x axis
+                    if self.dir.x ~= 0 and not util.between(self.x, t, t - self.dir.x) then
+                        -- TODO if player, unless the user is still holding the button
+                        self.x = t
+                        self.dir = nil
+                        self.target = nil
+                        self.callback:done()
+                    -- If the cell is done moving on the y axis
+                    elseif self.dir.y ~= 0 and not util.between(self.y, t, t - self.dir.y) then
+                        self.y = t
+                        self.dir = nil
+                        self.target = nil
+                        self.callback:done()
+                    end
                 end
             end
         end
@@ -35,7 +53,7 @@ cellObject.new = function (xPos, yPos, im, canMove, isSolid)
             if not self.dir and static.grid:isOpen(self.cellX + dir.x, self.cellY + dir.y) then
                 self.dir = dir
                 self.target = (dir.x == 0 and self.y + dir.y) or (self.x + dir.x)
-                print('target: ', self.target)
+                self.callback = static.grid:move(self, self.cellX + dir.x, self.cellY + dir.y)
             end
         end
     end

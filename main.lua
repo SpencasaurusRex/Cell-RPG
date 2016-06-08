@@ -11,21 +11,22 @@ function love.load(arg)
     require 'util'
     require 'player'
 
+    static.camera:follow(static.player)
+
     -- Setup input variables
     spacePressedLastFrame = false
 
-    -- Load in 10x10 grass square
+    -- Load in grass plot
     local grassSprite  = love.graphics.newImage('Graphics/grass.png')
     local i = 0
     local j = 0
-    for i=0,10 do
-        for j=0,10 do
+    for i=0,static.grid.width do
+        for j=0,static.grid.height do
             local cellObj = cellObject.new(i, j, grassSprite, false, false)
             static.grid:addCellObject(cellObj)        
         end
     end
     result = static.grid:addCellObject(static.player)
-    print(result)
 end
 
 function love.update(dt)
@@ -34,11 +35,24 @@ function love.update(dt)
     for k,v in pairs(static.grid.cellObjects) do
         v:update()
     end
+    static.camera:update()
 end
 
 function love.draw()
     for k,v in pairs(static.grid.cellObjects) do
         love.graphics.draw(v:draw())
+    end
+
+    -- Visualize blocked cells
+    local blockedSprite = love.graphics.newImage('Graphics/square.png')
+    local i = 0
+    local j = 0
+    for i=0,static.grid.width do
+        for j=0,static.grid.height do
+            if static.grid.locked[i][j] then
+                love.graphics.draw(cellObject.new(i, j, blockedSprite, false, false):draw())
+            end
+        end
     end
 end
 
