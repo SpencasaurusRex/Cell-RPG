@@ -6,15 +6,15 @@ static.camera = {
     target = nil,
     follow = function(self, theTarget)
         if theTarget then
-            target = theTarget
+            self.target = theTarget
         else
-            target = nil
+            self.target = nil
         end
     end,
     update = function(self)
-        if target then
-            self.x = target.x
-            self.y = target.y
+        if self.target then
+            self.x = self.target.x
+            self.y = self.target.y
         end
     end
 }
