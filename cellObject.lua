@@ -17,8 +17,8 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
             local camY = static.camera.y
             local s = self.scale * static.camera.scale
             return  self.image,
-                    w / 2 - s * (camX + .5 - self.x) - self.image:getWidth()  / 2,
-                    h / 2 + s * (camY + .5 - self.y) + self.image:getHeight() / 2 - s,
+                    w / 2 - s * (camX - self.x) - s / 2,
+                    h / 2 + s * (camY - self.y) + s / 2 - s,
                     0,
                     static.camera.scale,
                     static.camera.scale
