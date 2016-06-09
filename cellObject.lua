@@ -8,7 +8,6 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
         image = image,
         scale = scale,
         solid = solid,
-        movable = movable,
         speed = 3 or speed,
         facing = 3 or facing,
         draw = function(self)
@@ -24,7 +23,7 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
                     static.camera.scale * (self.scale / self.image:getHeight())
         end,
         update = function(self)
-            if self.movable and self.dir then
+            if self.move and self.dir then
                 -- Move the cell
                 self.x = self.x + self.dir.x * static.time.delta * self.speed
                 self.y = self.y + self.dir.y * static.time.delta * self.speed
