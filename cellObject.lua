@@ -32,11 +32,16 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
                 local t = self.target
                 -- If the cell is done moving on the x axis
                 if self.dir.x ~= 0 and not util.between(self.x, t, t - self.dir.x) then
-                    -- TODO if player, unless the user is still holding the button
-                    self.x = t
-                    self.dir = nil
-                    self.target = nil
                     self.callback:done()
+                    -- If we should keep going
+                    if self.next and self.next.x == self.dir.x then
+                        self.target = self.target + self.dir.x
+                        self.callback = static.grid:move(self, self.cellX + self.dir.x, self.cellY)
+                    else
+                        self.x = t
+                        self.dir = nil
+                        self.target = nil
+                    end
                 -- If the cell is done moving on the y axis
                 elseif self.dir.y ~= 0 and not util.between(self.y, t, t - self.dir.y) then
                     self.y = t
@@ -49,11 +54,18 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
     }
     if movable then
         cellObj.move = function(self, dir)
-            if not self.dir and static.grid:isOpen(self.cellX + dir.x, self.cellY + dir.y) then
-                self.dir = dir
-                self.target = (dir.x == 0 and self.y + dir.y) or (self.x + dir.x)
-                self.callback = static.grid:move(self, self.cellX + dir.x, self.cellY + dir.y)
+            if static.grid:isOpen(self.cellX + dir.x, self.cellY + dir.y) then
+                if self.dir then
+                    self.next = dir
+                else
+                    self.dir = dir
+                    self.target = (dir.x == 0 and self.y + dir.y) or (self.x + dir.x)
+                    self.callback = static.grid:move(self, self.cellX + dir.x, self.cellY + dir.y)    
+                end
             end
+        end
+        cellObj.stop = function(self)
+            self.next = nil
         end
     end
     return cellObj

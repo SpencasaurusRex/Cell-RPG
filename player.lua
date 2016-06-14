@@ -5,6 +5,8 @@ static.player.update = function(self)
     local dir = util.inputDirection()
     if (dir.x == 0) == not (dir.y == 0) then
         self:move(dir)
+    elseif dir.x == 0 and dir.y == 0 then
+    	self:stop()
     end
     update(self)
 end
