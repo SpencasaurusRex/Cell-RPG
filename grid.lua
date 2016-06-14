@@ -1,6 +1,6 @@
 static.grid = {
-    width = 10,
-    height = 10,
+    width = 100,
+    height = 100,
     isOpen = function(self, xPos, yPos)
         return  xPos >= 0 and xPos < self.width and 
                 yPos >= 0 and yPos < self.height and

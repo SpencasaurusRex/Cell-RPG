@@ -1,7 +1,7 @@
 
 function love.load(arg)
     -- Setup static constants
-    static = 
+    static =
     {
         time = {delta = 0},
     }
@@ -22,7 +22,7 @@ function love.load(arg)
     for i=0,static.grid.width do
         for j=0,static.grid.height do
             local cellObj = cellObject.new(i, j, grassSprite, 32, false, false)
-            static.grid:addCellObject(cellObj)        
+            static.grid:addCellObject(cellObj)
         end
     end
     static.grid:addCellObject(static.player)
@@ -31,27 +31,15 @@ end
 function love.update(dt)
     static.time.delta = dt
     handleInput()
-    local k,v
-    for k,v in pairs(static.grid.cellObjects) do
-        v:update()
-    end
     static.camera:update()
+	static.player:update()
 end
 
 function love.draw()
     local k,v
     for k,v in pairs(static.grid.cellObjects) do
-        love.graphics.draw(v:draw())
-    end
-
-    -- Visualize blocked cells
-    local blockedSprite = love.graphics.newImage('Graphics/square.png')
-    local i,j
-    for i=0,static.grid.width do
-        for j=0,static.grid.height do
-            if static.grid.locked[i][j] then
-                love.graphics.draw(cellObject.new(i, j, blockedSprite, 32, false, false):draw())
-            end
+        if math.abs(v.x - static.player.x) < static.camera:rangeX() and math.abs(v.y - static.player.y) < static.camera:rangeY() then
+            v:draw()
         end
     end
 end
@@ -62,7 +50,7 @@ function love.wheelmoved(x,y)
 end
 
 function love.quit()
-    
+
 end
 
 function handleInput()
