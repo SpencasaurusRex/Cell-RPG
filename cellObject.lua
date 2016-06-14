@@ -9,7 +9,7 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
         scale = scale,
         solid = solid,
         movable = movable,
-        speed = 3 or speed,
+        speed = 5 or speed,
         facing = 3 or facing,
         draw = function(self)
             local w,h = love.graphics.getDimensions()
@@ -17,8 +17,8 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
             local camY = static.camera.y
             local s = self.scale * static.camera.scale
             return  self.image,
-                    w / 2 - s * (camX - self.x) - s / 2,
-                    h / 2 + s * (camY - self.y) + s / 2 - s,
+                    w / 2 - s * (camX - self.x + .5),
+                    h / 2 + s * (camY - self.y - .5),
                     0,
                     static.camera.scale * (self.scale / self.image:getWidth()),
                     static.camera.scale * (self.scale / self.image:getHeight())
