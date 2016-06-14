@@ -1,5 +1,7 @@
 local playerSprite = love.graphics.newImage('Graphics/player.png')
 static.player = cellObject.new(0, 0, playerSprite, 20, true, true)
+
+-- Override the update method to pull in wasd input
 local update = static.player.update
 static.player.update = function(self)
     local dir = util.inputDirection()

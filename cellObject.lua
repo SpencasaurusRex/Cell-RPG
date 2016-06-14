@@ -18,8 +18,8 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
 
 			love.graphics.draw(
 				self.image,
-				w / 2 - s * (camX - self.x) - s / 2,
-				h / 2 + s * (camY - self.y) + s / 2 - s,
+				w / 2 - s * (camX - self.x + 0.5),
+				h / 2 + s * (camY - self.y - 0.5),
 				0,
 				static.camera.scale * self.scale / self.image:getWidth(),
 				static.camera.scale * self.scale / self.image:getHeight())
