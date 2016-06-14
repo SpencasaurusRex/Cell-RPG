@@ -8,7 +8,6 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
         image = image,
         scale = scale,
         solid = solid,
-        movable = movable,
         speed = 3 or speed,
         facing = 3 or facing,
         draw = function(self)
@@ -17,14 +16,14 @@ cellObject.new = function (x, y, image, scale, movable, solid, speed, facing)
             local camY = static.camera.y
             local s = self.scale * static.camera.scale
             return  self.image,
-                    w / 2 - s * (camX - self.x) - s / 2,
-                    h / 2 + s * (camY - self.y) + s / 2 - s,
+                    w / 2 - s * (camX - self.x + .5),
+                    h / 2 + s * (camY - self.y - .5),
                     0,
                     static.camera.scale * (self.scale / self.image:getWidth()),
                     static.camera.scale * (self.scale / self.image:getHeight())
         end,
         update = function(self)
-            if self.movable and self.dir then
+            if self.move and self.dir then
                 -- Move the cell
                 self.x = self.x + self.dir.x * static.time.delta * self.speed
                 self.y = self.y + self.dir.y * static.time.delta * self.speed
